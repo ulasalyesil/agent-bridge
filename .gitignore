@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.demo/
+.tests/
+peers/
+
+# Build history and local run output, never pushed
+*.log
+codex-*.md
+PROMPT*.md
+.DS_Store
