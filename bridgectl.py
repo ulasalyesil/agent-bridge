@@ -563,7 +563,7 @@ def validate_intake(config):
 
 def intake_config(report, args):
     config = read_json(intake_path())
-    if not any((args.project, args.dir, args.context, args.default)) and args.role is None:
+    if not any((args.project, args.dir, args.context, args.default)) and args.role is None and args.receipt is None:
         report.add('ok', 'Intake config', json.dumps(config, ensure_ascii=False), config=config)
         return
     config = config or dict(projects={}, default_project='', runner='codex', effort='medium',
@@ -586,6 +586,8 @@ def intake_config(report, args):
         config['default_project'] = args.default
     if args.role is not None:
         config['role'] = args.role
+    if args.receipt is not None:
+        config['auto_receipt'] = args.receipt == 'on'
     validate_intake(config)
     apply_plan(report, [('Write {}: {}'.format(intake_path(), json.dumps(config, ensure_ascii=False)),
                          lambda: write_json(intake_path(), config))], args.dry_run)
@@ -1170,6 +1172,7 @@ def main(argv=None):
             sub.add_argument('--context', action='append')
             sub.add_argument('--default')
             sub.add_argument('--role')
+            sub.add_argument('--receipt', choices=('on', 'off'))
         if name == 'watch':
             sub.add_argument('--once', action='store_true', required=True)
         if name == 'status':

@@ -1,15 +1,51 @@
 # Install agent-bridge with your coding agent
 
-Paste this prompt into Claude Code or Codex, replacing the two names:
+Paste this prompt into Claude Code or Codex. Nothing else is needed; the agent asks the rest:
 
 ```text
-Install agent-bridge from https://github.com/ulasalyesil/agent-bridge, read INSTALL.md and follow it. I am <your-name>, my partner is <partner-name>. Ask me before every install or config change.
+Install agent-bridge from https://github.com/ulasalyesil/agent-bridge, read INSTALL.md and follow it. Ask me before every install or config change.
 ```
 
 The repository is public. Choose a checkout location outside an iCloud-synced
 Documents folder, for example `~/Projects/agent-bridge`, so Syncthing and iCloud
 do not sync the same files. If a checkout already exists, inspect it and use it;
 do not overwrite it or its data.
+
+## 0. Setup questionnaire (agent: do this first)
+
+Before changing anything, run `check` (step 1) so you can pre-fill answers, then ask the
+human these questions **in one short message**, numbered, each with your suggested
+default in brackets. They can answer briefly or reply "defaults". Ask a follow-up only
+for an answer that is missing or unclear. Never ask for passwords, tokens or account
+details.
+
+1. **What's your name?** Used as your display name in receipts and intake notes, exactly as typed (for example `Ulaş`).
+2. **Who are you working with on the other Mac?** Their name.
+3. **Which agents do you use on this Mac?** [the clients `check` found: Claude Code, Codex, or both]
+4. **Where should agent-bridge live?** [`~/Projects/agent-bridge`; never inside an iCloud-synced Documents folder]
+5. **Should every new Claude/Codex session tell you when something new arrives?** [yes] Enables step 9.
+6. **When your partner sends you files, should your agent prepare them automatically?** [no] Needs Codex. If yes, also ask:
+   - a. Which project folder should incoming handoffs go into, and a short project name (lowercase, like `stage`)?
+   - b. Your role in one line, so first-pass ideas fit your work (for example "motion and technical direction for stage visuals").
+   - c. Any brief or notes your agent should read for context? (optional file paths)
+   - d. Send your partner an automatic "received" note when a handoff is ready? [yes]
+
+   Yes enables steps 7 and 8.
+
+**IDs.** From answers 1 and 2, propose two IDs matching `[a-z][a-z0-9-]{0,31}`. Lowercase them, transliterate to ASCII (ş→s, ü→u, ç→c, ğ→g, ı→i, ö→o, é→e) and turn spaces into hyphens: `Ulaş` → `ulas`, `Eylül` → `eylul`. Show them as **you: `ulas` · partner: `eylul`**. Tell the human that their partner's install must use the same two IDs reversed, and that they should agree on them together (for example while reading device IDs aloud in step 4). A mismatch means records are rejected and `doctor` reports them.
+
+**Summary.** Then show a short summary: the answers, the two IDs, and which steps will run (1 to 6 always; 7 and 8 only if answer 6 is yes; 9 only if answer 5 is yes). Get a yes before starting. Every change in those steps still needs its own dry-run and approval under the rules below.
+
+Map answers to commands:
+- 1 → `--display-name`
+- IDs → `--peer` / `--partner`
+- 3 → `--clients`
+- 4 → the checkout path
+- 6a → `intake-config --project/--dir/--default`
+- 6b → `--role`
+- 6c → `--context`
+
+Answer 6d maps to `intake-config --receipt on|off` (default on).
 
 ## Rules for the installing agent
 
