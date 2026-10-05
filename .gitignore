@@ -3,9 +3,11 @@ __pycache__/
 .demo/
 .tests/
 peers/
+peers.demo-backup/
 
 # Build history and local run output, never pushed
 *.log
 codex-*.md
 PROMPT*.md
 .DS_Store
+site/
